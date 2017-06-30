@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import Swipe from './swipe-js-iso';
+import Swipe from './swipe';
 import objectAssign from 'object-assign';
 
 class ReactSwipe extends Component {

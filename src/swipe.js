@@ -39,6 +39,7 @@
     var index = parseInt(options.startSlide, 10) || 0;
     var speed = options.speed || 300;
     var continuous = options.continuous = options.continuous !== undefined ? options.continuous : true;
+    var margin = options.margin || 0;
 
     function setup() {
 
@@ -60,7 +61,7 @@
       slidePos = new Array(slides.length);
 
       // determine width of each slide
-      width = container.getBoundingClientRect().width || container.offsetWidth;
+      width = (container.getBoundingClientRect().width || container.offsetWidth) - margin * 2;
 
       element.style.width = (slides.length * width) + 'px';
 
@@ -69,12 +70,15 @@
       while(pos--) {
 
         var slide = slides[pos];
+        var slideChild = slide.firstChild;
 
         slide.style.width = width + 'px';
+        slide.style.perspective = width * 2 + 'px';
         slide.setAttribute('data-index', pos);
+        slideChild.style.transition = 'transform ' + (speed / 1000.0) + 's';
 
         if (browser.transitions) {
-          slide.style.left = (pos * -width) + 'px';
+          slide.style.left = (pos * -width) + margin + 'px';
           move(pos, index > pos ? -width : (index < pos ? width : 0), 0);
         }
 
@@ -86,9 +90,10 @@
         move(circle(index+1), width, 0);
       }
 
-      if (!browser.transitions) element.style.left = (index * -width) + 'px';
+      if (!browser.transitions) element.style.left = (index * -width) + margin + 'px';
 
       container.style.visibility = 'visible';
+      updateStyle(index);
 
     }
 
@@ -153,7 +158,34 @@
       }
 
       index = to;
+      updateStyle(index);
       offloadFn(options.callback && options.callback(index, slides[index]));
+    }
+
+    function updateStyle(index){
+      var cur = slides[index];
+      var next = slides[circle(index + 1)];
+      var curStyle = cur && cur.style;
+      var nextStyle = next && next.style;
+
+      if (!curStyle || !nextStyle) return;
+
+      cur.firstChild && (cur.firstChild.style.transform = 'none');
+      for (var k in slides) {
+        var item = slides[k];
+        if(item.style && k != index){
+          if (Math.abs(index - k) > 1 && !(index == 0 && k == (slides.length - 1)) && !(k == 0 && index == (slides.length - 1))) {
+            item.style.zIndex = 100;
+          } else {
+            item.style.zIndex = 101;
+          }
+          if (item.style.transform.indexOf('-') === -1) {
+            item.firstChild && (item.firstChild.style.transform = 'rotateY(-9deg)');
+          } else {
+            item.firstChild && (item.firstChild.style.transform = 'rotateY(9deg)');
+          }
+        }
+      }
     }
 
     function move(index, dist, speed) {
@@ -188,7 +220,7 @@
       // if not an animation, just reposition
       if (!speed) {
 
-        element.style.left = to + 'px';
+        element.style.left = to + margin + 'px';
         return;
 
       }
@@ -201,7 +233,7 @@
 
         if (timeElap > speed) {
 
-          element.style.left = to + 'px';
+          element.style.left = to + margin + 'px';
 
           if (delay) begin();
 
@@ -212,7 +244,7 @@
 
         }
 
-        element.style.left = (( (to - from) * (Math.floor((timeElap / speed) * 100) / 100) ) + from) + 'px';
+        element.style.left = (( (to - from) * (Math.floor((timeElap / speed) * 100) / 100) ) + margin + from) + 'px';
 
       }, 4);
 
@@ -423,10 +455,13 @@
 
         }
 
+        updateStyle(index);
+
+        delay = options.auto || 0;
+
         // kill touchmove and touchend event listeners until touchstart called again
         element.removeEventListener('touchmove', events, false);
         element.removeEventListener('touchend', events, false);
-        element.removeEventListener('touchforcechange', function() {}, false);
 
       },
       transitionEnd: function(event) {
