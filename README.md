@@ -2,6 +2,9 @@
 
 forked from voronianski's react-swipe & swipe-js-iso
 
+## Diff
+new swipeOptions - margin, default 0
+
 ## Demo
 
 <img src="https://github.com/qilovehua/react-swipe-plus/blob/master/demo/swipe.gif" width="600" />
