@@ -86,7 +86,7 @@ class ReactSwipe extends Component {
 
     return (
       <div ref="container" id={id} className={`react-swipe-container ${className}`} style={style.container}>
-        <div style={style.wrapper}>
+        <div className="swipe-wrap" style={style.wrapper}>
           {React.Children.map(children, (child) => {
             if (!child) {
               return null;
