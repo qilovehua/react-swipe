@@ -1,8 +1,8 @@
 {
-  "name": "react-swipe",
-  "version": "5.0.8",
-  "description": "Brad Birdsall's Swipe.js, as a React component",
-  "homepage": "https://github.com/voronianski/react-swipe",
+  "name": "react-swipe-plus",
+  "version": "1.0.1",
+  "description": "forked from voronianski's react-swipe&swipe-js-iso, as a React component",
+  "homepage": "https://github.com/qilovehua/react-swipe-plus",
   "keywords": [
     "react",
     "component",
@@ -10,13 +10,14 @@
     "swipe",
     "react-component"
   ],
-  "author": "Dmitri Voronianski <dmitri.voronianski@gmail.com>",
+  "author": "qilovehua <lhq0631@163.com>",
   "contributors": [
+    "Dmitri Voronianski <dmitri.voronianski@gmail.com>",
     "Jed Schmidt <where@jed.is>"
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/voronianski/react-swipe.git"
+    "url": "git://github.com/qilovehua/react-swipe-plus.git"
   },
   "main": "index.js",
   "license": "MIT",
