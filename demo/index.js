@@ -21,7 +21,7 @@ const swipeOptions = {
   startSlide: startSlide < paneNodes.length && startSlide >= 0 ? startSlide : 0,
   auto: parseInt(query.auto, 10) || 0,
   margin: parseInt(query.margin, 10) || 0,
-  speed: parseInt(query.speed, 10) || 300,
+  speed: parseInt(query.speed, 10) || 2000,
   disableScroll: query.disableScroll === 'true',
   continuous: query.continuous === 'true',
   callback(cur, curDom) {
