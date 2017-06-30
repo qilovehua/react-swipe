@@ -9,7 +9,7 @@ const query = querystring.parse(window.location.search.slice(1));
 const numberOfSlides = parseInt(query.slidesNum, 10) || 20;
 const paneNodes = Array.apply(null, Array(numberOfSlides)).map((_, i) => {
   return (
-    <div key={i}>
+    <div className="itemWrap" key={i}>
       <div className="item">{i}</div>
     </div>
   );
@@ -20,11 +20,12 @@ const startSlide = parseInt(query.startSlide, 10) || 0;
 const swipeOptions = {
   startSlide: startSlide < paneNodes.length && startSlide >= 0 ? startSlide : 0,
   auto: parseInt(query.auto, 10) || 0,
+  margin: parseInt(query.margin, 10) || 0,
   speed: parseInt(query.speed, 10) || 300,
   disableScroll: query.disableScroll === 'true',
   continuous: query.continuous === 'true',
-  callback() {
-    console.log('slide changed');
+  callback(cur, curDom) {
+    console.log('slide changed', cur, curDom);
   },
   transitionEnd() {
     console.log('ended transition');
@@ -52,8 +53,8 @@ class Page extends Component {
         </ReactSwipe>
 
         <div>
-          <button type="button" onClick={::this.prev}>Prev</button>
-          <button type="button" onClick={::this.next}>Next</button>
+          <button type="button" onTouchEnd={()=>{this.prev()}} onClick={()=>{this.prev()}}>Prev</button>
+          <button type="button" onTouchEnd={()=>{this.next()}} onClick={()=>{this.next()}}>Next</button>
         </div>
       </div>
     );

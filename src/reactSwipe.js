@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import Swipe from 'swipe-js-iso';
+import Swipe from './swipe-js-iso';
 import objectAssign from 'object-assign';
 
 class ReactSwipe extends Component {
   static propTypes = {
     swipeOptions: PropTypes.shape({
       startSlide: PropTypes.number,
+      margin: PropTypes.number,
       speed: PropTypes.number,
       auto: PropTypes.number,
       continuous: PropTypes.bool,
