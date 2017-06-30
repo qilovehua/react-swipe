@@ -93,7 +93,7 @@
       if (!browser.transitions) element.style.left = (index * -width) + margin + 'px';
 
       container.style.visibility = 'visible';
-      updateStyle(index);
+      updateStyle(index, false);
 
     }
 
@@ -123,9 +123,9 @@
       // do nothing if already on requested slide
       if (index == to) return;
 
-      if (browser.transitions) {
+      var direction = Math.abs(index-to) / (index-to); // 1: backward, -1: forward
 
-        var direction = Math.abs(index-to) / (index-to); // 1: backward, -1: forward
+      if (browser.transitions) {
 
         // get the actual position of the slide
         if (continuous) {
@@ -158,11 +158,11 @@
       }
 
       index = to;
-      updateStyle(index);
+      updateStyle(index, direction === -1);
       offloadFn(options.callback && options.callback(index, slides[index]));
     }
 
-    function updateStyle(index){
+    function updateStyle(index, direction=false) {
       var cur = slides[index];
       var next = slides[circle(index + 1)];
       var curStyle = cur && cur.style;
@@ -172,17 +172,23 @@
 
       cur.firstChild && (cur.firstChild.style.transform = 'none');
       for (var k in slides) {
+        var i = parseInt(k, 10);
         var item = slides[k];
-        if(item.style && k != index){
-          if (Math.abs(index - k) > 1 && !(index == 0 && k == (slides.length - 1)) && !(k == 0 && index == (slides.length - 1))) {
+
+        if(item.style) {
+          if (Math.abs(index - i) > 1 && !(i === 0 && index === (slides.length - 1))) {
+            item.style.zIndex = 100;
+          } else if (direction && (i - index === 1)) {
             item.style.zIndex = 100;
           } else {
             item.style.zIndex = 101;
           }
-          if (item.style.transform.indexOf('-') === -1) {
-            item.firstChild && (item.firstChild.style.transform = 'rotateY(-9deg)');
-          } else {
-            item.firstChild && (item.firstChild.style.transform = 'rotateY(9deg)');
+          if (i !== index) {
+            if (item.style.transform.indexOf('-') === -1) {
+              item.firstChild && (item.firstChild.style.transform = 'rotateY(-9deg)');
+            } else {
+              item.firstChild && (item.firstChild.style.transform = 'rotateY(9deg)');
+            }
           }
         }
       }
@@ -455,7 +461,7 @@
 
         }
 
-        updateStyle(index);
+        updateStyle(index, direction);
 
         delay = options.auto || 0;
 
