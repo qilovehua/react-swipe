@@ -163,19 +163,18 @@
     }
 
     function updateStyle(index, direction=false) {
-      var cur = slides[index];
-      var next = slides[circle(index + 1)];
-      var curStyle = cur && cur.style;
-      var nextStyle = next && next.style;
+      let cur = slides[index];
+      let next = slides[circle(index + 1)];
+      let curStyle = cur && cur.style;
+      let nextStyle = next && next.style;
 
       if (!curStyle || !nextStyle) return;
 
-      cur.firstChild && (cur.firstChild.style.transform = 'none');
-      for (var k in slides) {
-        var i = parseInt(k, 10);
-        var item = slides[k];
+      for (let k in slides) {
+        let item = slides[k];
 
-        if(item.style) {
+        if (item.style) {
+          let i = parseInt(k, 10);
           if (Math.abs(index - i) > 1 && !(i === 0 && index === (slides.length - 1))) {
             item.style.zIndex = 100;
           } else if (direction && (i - index === 1)) {
@@ -183,12 +182,12 @@
           } else {
             item.style.zIndex = 101;
           }
-          if (i !== index) {
-            if (item.style.transform.indexOf('-') === -1) {
-              item.firstChild && (item.firstChild.style.transform = 'rotateY(-9deg)');
-            } else {
-              item.firstChild && (item.firstChild.style.transform = 'rotateY(9deg)');
-            }
+          if (i === index) {
+            cur.firstChild && (cur.firstChild.style.transform = 'none');
+          } else if (item.style.transform.indexOf('-') === -1) {
+            item.firstChild && (item.firstChild.style.transform = 'rotateY(-9deg)');
+          } else {
+            item.firstChild && (item.firstChild.style.transform = 'rotateY(9deg)');
           }
         }
       }
