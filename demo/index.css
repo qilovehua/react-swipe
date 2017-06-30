@@ -40,9 +40,8 @@ h2 {
 .mySwipe {
     margin: 0 auto;
 }
-.mySwipe .itemWrap {
-  //width: 300px !important;
-  //z-index: 100;
+.mySwipe .swipe-wrap {
+    padding-bottom: 10px;
 }
 .mySwipe .item {
     font-weight: bold;
