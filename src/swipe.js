@@ -40,6 +40,7 @@
     var speed = options.speed || 300;
     var continuous = options.continuous = options.continuous !== undefined ? options.continuous : true;
     var margin = options.margin || 0;
+    var degree = options.degree || 0;
 
     function setup() {
 
@@ -67,21 +68,20 @@
 
       // stack elements
       var pos = slides.length;
-      while(pos--) {
-
+      while (pos--) {
         var slide = slides[pos];
-        var slideChild = slide.firstChild;
-
         slide.style.width = width + 'px';
-        slide.style.perspective = width * 2 + 'px';
+        if (degree) {
+          var slideChild = slide.firstChild;
+          slide.style.perspective = (width * 2) + 'px';
+          slideChild.style.transition = 'transform ' + (speed / 1000.0) + 's';
+        }
         slide.setAttribute('data-index', pos);
-        slideChild.style.transition = 'transform ' + (speed / 1000.0) + 's';
 
         if (browser.transitions) {
           slide.style.left = (pos * -width) + margin + 'px';
           move(pos, index > pos ? -width : (index < pos ? width : 0), 0);
         }
-
       }
 
       // reposition elements before and after index
@@ -170,27 +170,25 @@
 
       if (!curStyle || !nextStyle) return;
 
-      for (let k in slides) {
-        let item = slides[k];
-
-        if (item.style) {
-          let i = parseInt(k, 10);
-          if (Math.abs(index - i) > 1 && !(i === 0 && index === (slides.length - 1))) {
-            item.style.zIndex = 100;
-          } else if (direction && (i - index === 1)) {
-            item.style.zIndex = 100;
-          } else {
-            item.style.zIndex = 101;
-          }
+      // for (let k in slides) {
+      [...slides].forEach((item, i) => {
+        if (Math.abs(index - i) > 1 && !(i === 0 && index === (slides.length - 1))) {
+          item.style.zIndex = 100;
+        } else if (direction && (i - index === 1)) {
+          item.style.zIndex = 100;
+        } else {
+          item.style.zIndex = 101;
+        }
+        if (degree) {
           if (i === index) {
             cur.firstChild && (cur.firstChild.style.transform = 'none');
           } else if (item.style.transform.indexOf('-') === -1) {
-            item.firstChild && (item.firstChild.style.transform = 'rotateY(-9deg)');
+            item.firstChild && (item.firstChild.style.transform = 'rotateY(-' + degree + 'deg)');
           } else {
-            item.firstChild && (item.firstChild.style.transform = 'rotateY(9deg)');
+            item.firstChild && (item.firstChild.style.transform = 'rotateY(' + degree + 'deg)');
           }
         }
-      }
+      });
     }
 
     function move(index, dist, speed) {

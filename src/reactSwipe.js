@@ -8,6 +8,7 @@ class ReactSwipe extends Component {
     swipeOptions: PropTypes.shape({
       startSlide: PropTypes.number,
       margin: PropTypes.number,
+      degree: PropTypes.number,
       speed: PropTypes.number,
       auto: PropTypes.number,
       continuous: PropTypes.bool,
