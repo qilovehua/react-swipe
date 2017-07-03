@@ -3,8 +3,8 @@
 forked from voronianski's react-swipe & swipe-js-iso
 
 ## Diff
-new swipeOptions - margin, default 0 - slide_width = 100% - margin * 2
-new swipeOptions - degree, default 0(no 3D when swipe)
+1. new swipeOptions - margin, default 0 - slide_width = 100% - margin * 2
+1. new swipeOptions - degree, default 0(no 3D when swipe)
 
 ## Demo
 
@@ -35,8 +35,6 @@ open index.html (by browser)
 
 ## Usage
 there is no npm package for react-swipe-plus
-
-### Example
 
 
 **MIT Licensed**
