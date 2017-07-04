@@ -34,7 +34,6 @@ open index.html (by browser)
 ```
 
 ## Usage
-there is no npm package for react-swipe-plus
 
 
 **MIT Licensed**
