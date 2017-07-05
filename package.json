@@ -1,6 +1,6 @@
 {
   "name": "react-swipe-plus",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "forked from voronianski's react-swipe&swipe-js-iso, as a React component",
   "homepage": "https://github.com/qilovehua/react-swipe-plus",
   "keywords": [
@@ -19,7 +19,7 @@
     "type": "git",
     "url": "git://github.com/qilovehua/react-swipe-plus.git"
   },
-  "main": "index.js",
+  "main": "dist/react-swipe.min.js",
   "license": "MIT",
   "dependencies": {
     "object-assign": "^4.1.0",
