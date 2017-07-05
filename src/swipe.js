@@ -382,6 +382,8 @@
       },
       end: function(event) {
 
+        if (options.disableScroll) event.preventDefault();
+
         // measure duration
         var duration = +new Date() - start.time;
 
