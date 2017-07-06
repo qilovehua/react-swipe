@@ -25,7 +25,7 @@ swipeOptions:
 file:///Users/qilovehua/react/react-swipe/demo/index.html?slidesNum=5&continuous=true&auto=0&speed=3000&startSlide=3&margin=30
 
 ## Config Options
-[Seed detail from voronianski/swipe-js-iso](https://github.com/voronianski/swipe-js-iso#config-options)
+[See detail from voronianski/swipe-js-iso](https://github.com/voronianski/swipe-js-iso#config-options)
 
 
 Swipe can take an optional second parameter– an object of key/value settings:
