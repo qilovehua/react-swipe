@@ -330,7 +330,6 @@
 
         if (options.disableScroll) {
           event.preventDefault();
-          event.stopPropagation();
         }
 
         var touches = event.touches[0];
@@ -387,7 +386,6 @@
 
         if (options.disableScroll) {
           event.preventDefault();
-          event.stopPropagation();
         }
 
         // measure duration
