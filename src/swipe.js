@@ -328,7 +328,10 @@
         // ensure swiping with one touch and not pinching
         if ( event.touches.length > 1 || event.scale && event.scale !== 1) return;
 
-        if (options.disableScroll) event.preventDefault();
+        if (options.disableScroll) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
 
         var touches = event.touches[0];
 
@@ -382,7 +385,10 @@
       },
       end: function(event) {
 
-        if (options.disableScroll) event.preventDefault();
+        if (options.disableScroll) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
 
         // measure duration
         var duration = +new Date() - start.time;
