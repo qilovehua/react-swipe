@@ -25,12 +25,13 @@ swipeOptions:
 file:///Users/qilovehua/react/react-swipe/demo/index.html?slidesNum=5&continuous=true&auto=0&speed=3000&startSlide=3&margin=30
 
 ## Config Options
-[from voronianski/swipe-js-iso](https://github.com/voronianski/swipe-js-iso#config-options)
+<p>[Seed detail from voronianski/swipe-js-iso](https://github.com/voronianski/swipe-js-iso#config-options)</p>
+
 Swipe can take an optional second parameter– an object of key/value settings:
 
 - **startSlide** Integer *(default:0)* - index position Swipe should start at
 
--       **speed** Integer *(default:300)* - speed of prev and next transitions in milliseconds.
+- **speed** Integer *(default:300)* - speed of prev and next transitions in milliseconds.
 
 - **auto** Integer - begin with auto slideshow (time in milliseconds between slides)
 
@@ -42,7 +43,7 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **swiping** Function - invoked while swiping with the percentage (0-1) of the full width that has been swiped.
 
--       **callback** Function - runs at slide change.
+- **callback** Function - runs at slide change.
 
 - **transitionEnd** Function - runs at the end slide transition.
 
