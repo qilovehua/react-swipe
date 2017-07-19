@@ -5,6 +5,7 @@ const env = process.env.NODE_ENV || 'development';
 const webpack = require('webpack');
 const path = require('path');
 const webpackUMDExternal = require('webpack-umd-external');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const pluginsList = [];
 const outputFileName = env === 'production' ?
@@ -17,6 +18,18 @@ if (env === 'production') {
       compress: { warnings: false },
       output: { comments: false }
     })
+  );
+  pluginsList.push(
+    new CopyWebpackPlugin([
+      {
+        from: './src/reactSwipe.js',
+        to: './reactSwipe.js'
+      },
+      {
+        from: './src/swipe.js',
+        to: './swipe.js'
+      }
+    ])
   );
 }
 
