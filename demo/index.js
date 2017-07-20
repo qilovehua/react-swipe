@@ -9,7 +9,7 @@ const query = querystring.parse(window.location.search.slice(1));
 const numberOfSlides = parseInt(query.slidesNum, 10) || 20;
 const paneNodes = Array.apply(null, Array(numberOfSlides)).map((_, i) => {
   return (
-    <div className="itemWrap" key={i}>
+    <div className="itemWrap" key={i} onClick={()=>{console.log('hahahahha', i);}}>
       <div className="item">{i}</div>
     </div>
   );
@@ -24,6 +24,7 @@ const swipeOptions = {
   degree: parseInt(query.degree, 10) || 0,
   speed: parseInt(query.speed, 10) || 2000,
   disableScroll: query.disableScroll === 'true',
+  stopPropagation: query.stopPropagation === 'true',
   continuous: query.continuous === 'true',
   callback(cur, curDom) {
     console.log('slide changed', cur, curDom);

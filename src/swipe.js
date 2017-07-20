@@ -385,7 +385,7 @@
       },
       end: function(event) {
 
-        if (options.disableScroll) {
+        if (options.disableScroll && (delta.x || delta.y)) {
           event.preventDefault();
         }
 
