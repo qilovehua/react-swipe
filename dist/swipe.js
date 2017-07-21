@@ -492,7 +492,7 @@
     setup();
 
     // start auto slideshow if applicable
-    if (delay) begin();
+    if (delay) setTimeout(begin, speed);
 
 
     // add event listeners
