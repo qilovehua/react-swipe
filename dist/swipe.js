@@ -293,7 +293,7 @@
           case 'resize': offloadFn(setup); break;
         }
 
-        if (options.stopPropagation && event.type !== 'touchend' && event.type !== 'click') {
+        if (options.stopPropagation) {
             event.stopPropagation();
         }
       },
@@ -385,7 +385,7 @@
       },
       end: function(event) {
 
-        if (options.disableScroll) {
+        if (options.disableScroll && (delta.x || delta.y)) {
           event.preventDefault();
         }
 
