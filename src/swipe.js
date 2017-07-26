@@ -283,7 +283,13 @@
 
         switch (event.type) {
           case 'touchstart': this.start(event); break;
-          case 'touchmove': this.move(event); break;
+          case 'touchmove': {
+            if (options.stopPropagation) {
+              event.stopPropagation();
+            }
+            this.move(event);
+            break;
+          }
           case 'touchend': offloadFn(this.end(event)); break;
           case 'webkitTransitionEnd':
           case 'msTransitionEnd':
@@ -293,9 +299,9 @@
           case 'resize': offloadFn(setup); break;
         }
 
-        if (options.stopPropagation) {
-            event.stopPropagation();
-        }
+        // if (options.stopPropagation) {
+        //     event.stopPropagation();
+        // }
       },
       start: function(event) {
 
