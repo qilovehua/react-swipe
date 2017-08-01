@@ -32,7 +32,9 @@ Swipe can take an optional second parameter– an object of key/value settings:
 
 - **startSlide** Integer *(default:0)* - index position Swipe should start at
 
-- **speed** Integer *(default:300)* - speed of prev and next transitions in milliseconds.
+- **speed** Integer *(default:300)* - speed of prev and next transitions by auto slideshow in milliseconds.
+
+- **touchSpeed** Integer *(default:300)* - speed of prev and next transitions by touch in milliseconds.
 
 - **auto** Integer - begin with auto slideshow (time in milliseconds between slides)
 
