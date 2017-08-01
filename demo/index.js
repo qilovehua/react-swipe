@@ -23,6 +23,7 @@ const swipeOptions = {
   margin: parseInt(query.margin, 10) || 0,
   degree: parseInt(query.degree, 10) || 0,
   speed: parseInt(query.speed, 10) || 2000,
+  touchSpeed: parseInt(query.touchSpeed, 10) || 300,
   disableScroll: query.disableScroll === 'true',
   stopPropagation: query.stopPropagation === 'true',
   continuous: query.continuous === 'true',

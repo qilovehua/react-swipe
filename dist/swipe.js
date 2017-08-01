@@ -37,7 +37,8 @@
     var slides, slidePos, width, length;
     options = options || {};
     var index = parseInt(options.startSlide, 10) || 0;
-    var speed = options.speed || 300;
+    var speed = options.speed || 2000;
+    var touchSpeed = options.touchSpeed || 300;
     var continuous = options.continuous = options.continuous !== undefined ? options.continuous : true;
     var margin = options.margin || 0;
     var degree = options.degree || 0;
@@ -413,62 +414,46 @@
 
         // determine direction of swipe (true:right, false:left)
         var direction = delta.x < 0;
-
+        
         // if not scrolling vertically
         if (!isScrolling) {
-
           if (isValidSlide && !isPastBounds) {
-
             if (direction) {
-
               if (continuous) { // we need to get the next in this direction in place
-
                 move(circle(index-1), -width, 0);
                 move(circle(index+2), width, 0);
-
               } else {
                 move(index-1, -width, 0);
               }
 
-              move(index, slidePos[index]-width, speed);
-              move(circle(index+1), slidePos[circle(index+1)]-width, speed);
+              move(index, slidePos[index]-width, touchSpeed);
+              move(circle(index+1), slidePos[circle(index+1)]-width, touchSpeed);
               index = circle(index+1);
-
             } else {
               if (continuous) { // we need to get the next in this direction in place
-
                 move(circle(index+1), width, 0);
                 move(circle(index-2), -width, 0);
-
               } else {
                 move(index+1, width, 0);
               }
 
-              move(index, slidePos[index]+width, speed);
-              move(circle(index-1), slidePos[circle(index-1)]+width, speed);
+              move(index, slidePos[index]+width, touchSpeed);
+              move(circle(index-1), slidePos[circle(index-1)]+width, touchSpeed);
               index = circle(index-1);
-
             }
 
             options.callback && options.callback(index, slides[index]);
-
           } else {
-
             if (continuous) {
-
               move(circle(index-1), -width, speed);
               move(index, 0, speed);
               move(circle(index+1), width, speed);
-
             } else {
-
               move(index-1, -width, speed);
               move(index, 0, speed);
               move(index+1, width, speed);
             }
-
           }
-
         }
 
         updateStyle(index, direction);
