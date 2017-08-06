@@ -414,7 +414,7 @@
 
         // determine direction of swipe (true:right, false:left)
         var direction = delta.x < 0;
-        
+
         // if not scrolling vertically
         if (!isScrolling) {
           if (isValidSlide && !isPastBounds) {
@@ -542,6 +542,10 @@
 
         next();
 
+      },
+      begin: function() {
+        delay = options.auto || 0;
+        begin();
       },
       stop: function() {
 
