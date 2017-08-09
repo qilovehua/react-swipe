@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import objectAssign from 'object-assign';
 import Swipe from './swipe';
+import './style.css';
 
 class ReactSwipe extends Component {
   static propTypes = {
@@ -31,13 +32,11 @@ class ReactSwipe extends Component {
     swipeOptions: {},
     style: {
       container: {
-        overflow: 'hidden',
         visibility: 'hidden',
         position: 'relative'
       },
 
       wrapper: {
-        overflow: 'hidden',
         position: 'relative'
       },
 

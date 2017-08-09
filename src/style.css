@@ -1,0 +1,6 @@
+.react-swipe-container::after,
+.swipe-wrap::after {
+  content: '';
+  display: block;
+  clear: both;
+}
