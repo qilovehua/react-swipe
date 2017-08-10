@@ -32,7 +32,7 @@ class ReactSwipe extends Component {
     swipeOptions: {},
     style: {
       container: {
-        visibility: 'hidden',
+        overflow: 'hidden',
         position: 'relative'
       },
 
