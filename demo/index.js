@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import querystring from 'querystring';
 import ReactSwipe from '../src/reactSwipe';
 
+import './index.css';
+
 const query = querystring.parse(window.location.search.slice(1));
 
 // generate slide panes

@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("react"), require("swipe-js-iso"));
+		module.exports = factory(require("react"));
 	else if(typeof define === 'function' && define.amd)
-		define("ReactSwipe", ["react", "swipe-js-iso"], factory);
+		define("ReactSwipe", ["react"], factory);
 	else if(typeof exports === 'object')
-		exports["ReactSwipe"] = factory(require("react"), require("swipe-js-iso"));
+		exports["ReactSwipe"] = factory(require("react"));
 	else
-		root["ReactSwipe"] = factory(root["React"], root["Swipe"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_10__, __WEBPACK_EXTERNAL_MODULE_11__) {
+		root["ReactSwipe"] = factory(root["React"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_10__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -70,13 +70,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _swipeJsIso = __webpack_require__(11);
-
-	var _swipeJsIso2 = _interopRequireDefault(_swipeJsIso);
-
-	var _objectAssign = __webpack_require__(12);
+	var _objectAssign = __webpack_require__(11);
 
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+	var _swipe2 = __webpack_require__(12);
+
+	var _swipe3 = _interopRequireDefault(_swipe2);
+
+	__webpack_require__(13);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -101,7 +103,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var swipeOptions = this.props.swipeOptions;
 
 
-	      this.swipe = (0, _swipeJsIso2.default)(this.refs.container, swipeOptions);
+	      this.swipe = (0, _swipe3.default)(this.refs.container, swipeOptions);
 	    }
 	  }, {
 	    key: 'componentWillUnmount',
@@ -151,7 +153,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        { ref: 'container', id: id, className: 'react-swipe-container ' + className, style: style.container },
 	        _react2.default.createElement(
 	          'div',
-	          { style: style.wrapper },
+	          { className: 'swipe-wrap', style: style.wrapper },
 	          _react2.default.Children.map(children, function (child) {
 	            if (!child) {
 	              return null;
@@ -172,6 +174,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	ReactSwipe.propTypes = {
 	  swipeOptions: _propTypes2.default.shape({
 	    startSlide: _propTypes2.default.number,
+	    margin: _propTypes2.default.number,
+	    degree: _propTypes2.default.number,
 	    speed: _propTypes2.default.number,
 	    auto: _propTypes2.default.number,
 	    continuous: _propTypes2.default.bool,
@@ -194,12 +198,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  style: {
 	    container: {
 	      overflow: 'hidden',
-	      visibility: 'hidden',
 	      position: 'relative'
 	    },
 
 	    wrapper: {
-	      overflow: 'hidden',
 	      position: 'relative'
 	    },
 
@@ -426,6 +428,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	process.removeListener = noop;
 	process.removeAllListeners = noop;
 	process.emit = noop;
+	process.prependListener = noop;
+	process.prependOnceListener = noop;
+
+	process.listeners = function (name) { return [] }
 
 	process.binding = function (name) {
 	    throw new Error('process.binding is not supported');
@@ -764,6 +770,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return emptyFunction.thatReturnsNull;
 	    }
 
+	    for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+	      var checker = arrayOfTypeCheckers[i];
+	      if (typeof checker !== 'function') {
+	        warning(
+	          false,
+	          'Invalid argument supplid to oneOfType. Expected an array of check functions, but ' +
+	          'received %s at index %s.',
+	          getPostfixForTypeWarning(checker),
+	          i
+	        );
+	        return emptyFunction.thatReturnsNull;
+	      }
+	    }
+
 	    function validate(props, propName, componentName, location, propFullName) {
 	      for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
 	        var checker = arrayOfTypeCheckers[i];
@@ -896,6 +916,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // This handles more types than `getPropType`. Only used for error messages.
 	  // See `createPrimitiveTypeChecker`.
 	  function getPreciseType(propValue) {
+	    if (typeof propValue === 'undefined' || propValue === null) {
+	      return '' + propValue;
+	    }
 	    var propType = getPropType(propValue);
 	    if (propType === 'object') {
 	      if (propValue instanceof Date) {
@@ -905,6 +928,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	    return propType;
+	  }
+
+	  // Returns a string that is postfixed to a warning about an invalid type.
+	  // For example, "undefined" or "of type array"
+	  function getPostfixForTypeWarning(value) {
+	    var type = getPreciseType(value);
+	    switch (type) {
+	      case 'array':
+	      case 'object':
+	        return 'an ' + type;
+	      case 'boolean':
+	      case 'date':
+	      case 'regexp':
+	        return 'a ' + type;
+	      default:
+	        return type;
+	    }
 	  }
 
 	  // Returns class name of the object, if any.
@@ -1204,11 +1244,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var emptyFunction = __webpack_require__(4);
 	var invariant = __webpack_require__(5);
+	var ReactPropTypesSecret = __webpack_require__(7);
 
 	module.exports = function() {
-	  // Important!
-	  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
-	  function shim() {
+	  function shim(props, propName, componentName, location, propFullName, secret) {
+	    if (secret === ReactPropTypesSecret) {
+	      // It is still safe when called from React.
+	      return;
+	    }
 	    invariant(
 	      false,
 	      'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
@@ -1220,6 +1263,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function getShim() {
 	    return shim;
 	  };
+	  // Important!
+	  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
 	  var ReactPropTypes = {
 	    array: shim,
 	    bool: shim,
@@ -1255,12 +1300,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 11 */
-/***/ (function(module, exports) {
-
-	module.exports = __WEBPACK_EXTERNAL_MODULE_11__;
-
-/***/ }),
-/* 12 */
 /***/ (function(module, exports) {
 
 	/*
@@ -1353,6 +1392,938 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		return to;
 	};
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+	'use strict';
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	/*
+	 * Swipe 2.0.0
+	 * Brad Birdsall
+	 * https://github.com/thebird/Swipe
+	 * Copyright 2013-2015, MIT License
+	 *
+	*/
+
+	(function (root, factory) {
+	  if (typeof module !== 'undefined' && module.exports) {
+	    module.exports = factory();
+	  } else {
+	    root.Swipe = factory();
+	  }
+	})(undefined, function () {
+	  'use strict';
+
+	  return function Swipe(container, options) {
+	    // utilities
+	    var noop = function noop() {}; // simple no operation function
+	    var offloadFn = function offloadFn(fn) {
+	      setTimeout(fn || noop, 0);
+	    }; // offload a functions execution
+
+	    // check browser capabilities
+	    var browser = {
+	      addEventListener: !!window.addEventListener,
+	      touch: 'ontouchstart' in window || window.DocumentTouch && document instanceof window.DocumentTouch,
+	      transitions: function (temp) {
+	        var props = ['transitionProperty', 'WebkitTransition', 'MozTransition', 'OTransition', 'msTransition'];
+	        for (var i in props) {
+	          if (temp.style[props[i]] !== undefined) return true;
+	        }return false;
+	      }(document.createElement('swipe'))
+	    };
+
+	    // quit if no root element
+	    if (!container) return;
+	    var element = container.children[0];
+	    var slides, slidePos, width, length;
+	    options = options || {};
+	    var index = parseInt(options.startSlide, 10) || 0;
+	    var speed = options.speed || 2000;
+	    var touchSpeed = options.touchSpeed || 300;
+	    var continuous = options.continuous = options.continuous !== undefined ? options.continuous : true;
+	    var margin = options.margin || 0;
+	    var degree = options.degree || 0;
+
+	    function _setup() {
+
+	      // cache slides
+	      slides = element.children;
+	      length = slides.length;
+
+	      // set continuous to false if only one slide
+	      continuous = slides.length < 2 ? false : options.continuous;
+
+	      //special case if two slides
+	      if (browser.transitions && continuous && slides.length < 3) {
+	        element.appendChild(slides[0].cloneNode(true));
+	        element.appendChild(element.children[1].cloneNode(true));
+	        slides = element.children;
+	      }
+
+	      // create an array to store current positions of each slide
+	      slidePos = new Array(slides.length);
+
+	      // determine width of each slide
+	      width = (container.getBoundingClientRect().width || container.offsetWidth) - margin * 2;
+
+	      element.style.width = slides.length * width + 'px';
+
+	      // stack elements
+	      var pos = slides.length;
+	      while (pos--) {
+	        var slide = slides[pos];
+	        slide.style.width = width + 'px';
+	        if (degree) {
+	          var slideChild = slide.firstChild;
+	          slide.style.perspective = width * 2 + 'px';
+	          slideChild.style.transition = 'transform ' + speed / 1000.0 + 's';
+	        }
+	        slide.setAttribute('data-index', pos);
+
+	        if (browser.transitions) {
+	          slide.style.left = pos * -width + margin + 'px';
+	          move(pos, index > pos ? -width : index < pos ? width : 0, 0);
+	        }
+	      }
+
+	      // reposition elements before and after index
+	      if (continuous && browser.transitions) {
+	        move(circle(index - 1), -width, 0);
+	        move(circle(index + 1), width, 0);
+	      }
+
+	      if (!browser.transitions) element.style.left = index * -width + margin + 'px';
+
+	      container.style.visibility = 'visible';
+	      updateStyle(index, false);
+	    }
+
+	    function _prev() {
+
+	      if (continuous) _slide(index - 1);else if (index) _slide(index - 1);
+	    }
+
+	    function _next() {
+
+	      if (continuous) _slide(index + 1);else if (index < slides.length - 1) _slide(index + 1);
+	    }
+
+	    function circle(index) {
+
+	      // a simple positive modulo using slides.length
+	      return (slides.length + index % slides.length) % slides.length;
+	    }
+
+	    function _slide(to, slideSpeed) {
+
+	      // do nothing if already on requested slide
+	      if (index == to) return;
+
+	      var direction = Math.abs(index - to) / (index - to); // 1: backward, -1: forward
+
+	      if (browser.transitions) {
+
+	        // get the actual position of the slide
+	        if (continuous) {
+	          var natural_direction = direction;
+	          direction = -slidePos[circle(to)] / width;
+
+	          // if going forward but to < index, use to = slides.length + to
+	          // if going backward but to > index, use to = -slides.length + to
+	          if (direction !== natural_direction) to = -direction * slides.length + to;
+	        }
+
+	        var diff = Math.abs(index - to) - 1;
+
+	        // move all the slides between index and to in the right direction
+	        while (diff--) {
+	          move(circle((to > index ? to : index) - diff - 1), width * direction, 0);
+	        }to = circle(to);
+
+	        move(index, width * direction, slideSpeed || speed);
+	        move(to, 0, slideSpeed || speed);
+
+	        if (continuous) move(circle(to - direction), -(width * direction), 0); // we need to get the next in place
+	      } else {
+
+	        to = circle(to);
+	        animate(index * -width, to * -width, slideSpeed || speed);
+	        //no fallback for a circular continuous if the browser does not accept transitions
+	      }
+
+	      index = to;
+	      updateStyle(index, direction === -1);
+	      offloadFn(options.callback && options.callback(index, slides[index]));
+	    }
+
+	    function updateStyle(index) {
+	      var direction = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+	      var cur = slides[index];
+	      var next = slides[circle(index + 1)];
+	      var curStyle = cur && cur.style;
+	      var nextStyle = next && next.style;
+
+	      if (!curStyle || !nextStyle) return;
+
+	      // for (let k in slides) {
+	      [].concat(_toConsumableArray(slides)).forEach(function (item, i) {
+	        if (Math.abs(index - i) > 1 && !(i === 0 && index === slides.length - 1)) {
+	          item.style.zIndex = 100;
+	        } else if (direction && i - index === 1) {
+	          item.style.zIndex = 100;
+	        } else {
+	          item.style.zIndex = 101;
+	        }
+	        if (degree) {
+	          if (i === index) {
+	            cur.firstChild && (cur.firstChild.style.transform = 'none');
+	          } else if (item.style.transform.indexOf('-') === -1) {
+	            item.firstChild && (item.firstChild.style.transform = 'rotateY(-' + degree + 'deg)');
+	          } else {
+	            item.firstChild && (item.firstChild.style.transform = 'rotateY(' + degree + 'deg)');
+	          }
+	        }
+	      });
+	    }
+
+	    function move(index, dist, speed) {
+
+	      translate(index, dist, speed);
+	      slidePos[index] = dist;
+	    }
+
+	    function translate(index, dist, speed) {
+
+	      var slide = slides[index];
+	      var style = slide && slide.style;
+
+	      if (!style) return;
+
+	      style.webkitTransitionDuration = style.MozTransitionDuration = style.msTransitionDuration = style.OTransitionDuration = style.transitionDuration = speed + 'ms';
+
+	      style.webkitTransform = 'translate3d(' + dist + 'px, 0, 0)'; //'translate(' + dist + 'px,0)' + 'translateZ(0)';
+	      style.msTransform = style.MozTransform = style.OTransform = 'translate3d(' + dist + 'px, 0, 0)';
+	    }
+
+	    function animate(from, to, speed) {
+
+	      // if not an animation, just reposition
+	      if (!speed) {
+
+	        element.style.left = to + margin + 'px';
+	        return;
+	      }
+
+	      var start = +new Date();
+
+	      var timer = setInterval(function () {
+
+	        var timeElap = +new Date() - start;
+
+	        if (timeElap > speed) {
+
+	          element.style.left = to + margin + 'px';
+
+	          if (delay) _begin();
+
+	          options.transitionEnd && options.transitionEnd.call(event, index, slides[index]);
+
+	          clearInterval(timer);
+	          return;
+	        }
+
+	        element.style.left = (to - from) * (Math.floor(timeElap / speed * 100) / 100) + margin + from + 'px';
+	      }, 4);
+	    }
+
+	    // setup auto slideshow
+	    var delay = options.auto || 0;
+	    var interval;
+
+	    function _begin() {
+	      clearTimeout(interval);
+	      interval = setTimeout(_next, delay);
+	    }
+
+	    function _stop() {
+
+	      delay = 0;
+	      clearTimeout(interval);
+	    }
+
+	    // setup initial vars
+	    var _start = {};
+	    var delta = {};
+	    var isScrolling;
+
+	    // setup event capturing
+	    var events = {
+
+	      handleEvent: function handleEvent(event) {
+
+	        switch (event.type) {
+	          case 'touchstart':
+	            this.start(event);break;
+	          case 'touchmove':
+	            {
+	              if (options.stopPropagation) {
+	                event.stopPropagation();
+	              }
+	              this.move(event);
+	              break;
+	            }
+	          case 'touchend':
+	            offloadFn(this.end(event));break;
+	          case 'webkitTransitionEnd':
+	          case 'msTransitionEnd':
+	          case 'oTransitionEnd':
+	          case 'otransitionend':
+	          case 'transitionend':
+	            offloadFn(this.transitionEnd(event));break;
+	          case 'resize':
+	            offloadFn(_setup);break;
+	        }
+
+	        // if (options.stopPropagation) {
+	        //     event.stopPropagation();
+	        // }
+	      },
+	      start: function start(event) {
+
+	        var touches = event.touches[0];
+
+	        // measure start values
+	        _start = {
+
+	          // get initial touch coords
+	          x: touches.pageX,
+	          y: touches.pageY,
+
+	          // store time to determine touch duration
+	          time: +new Date()
+
+	        };
+
+	        // used for testing first move event
+	        isScrolling = undefined;
+
+	        // reset delta and end measurements
+	        delta = {};
+
+	        // attach touchmove and touchend listeners
+	        element.addEventListener('touchmove', this, false);
+	        element.addEventListener('touchend', this, false);
+	      },
+	      move: function move(event) {
+
+	        // ensure swiping with one touch and not pinching
+	        if (event.touches.length > 1 || event.scale && event.scale !== 1) return;
+
+	        if (options.disableScroll) {
+	          event.preventDefault();
+	        }
+
+	        var touches = event.touches[0];
+
+	        // measure change in x and y
+	        delta = {
+	          x: touches.pageX - _start.x,
+	          y: touches.pageY - _start.y
+	        };
+
+	        // determine if scrolling test has run - one time test
+	        if (typeof isScrolling == 'undefined') {
+	          isScrolling = !!(isScrolling || Math.abs(delta.x) < Math.abs(delta.y));
+	        }
+
+	        // if user is not trying to scroll vertically
+	        if (!isScrolling) {
+
+	          // prevent native scrolling
+	          event.preventDefault();
+
+	          // stop slideshow
+	          _stop();
+
+	          // increase resistance if first or last slide
+	          if (continuous) {
+	            // we don't add resistance at the end
+
+	            translate(circle(index - 1), delta.x + slidePos[circle(index - 1)], 0);
+	            translate(index, delta.x + slidePos[index], 0);
+	            translate(circle(index + 1), delta.x + slidePos[circle(index + 1)], 0);
+	          } else {
+
+	            delta.x = delta.x / (!index && delta.x > 0 || // if first slide and sliding left
+	            index == slides.length - 1 && // or if last slide and sliding right
+	            delta.x < 0 // and if sliding at all
+	            ? Math.abs(delta.x) / width + 1 : // determine resistance level
+	            1); // no resistance if false
+
+	            // translate 1:1
+	            translate(index - 1, delta.x + slidePos[index - 1], 0);
+	            translate(index, delta.x + slidePos[index], 0);
+	            translate(index + 1, delta.x + slidePos[index + 1], 0);
+	          }
+	          options.swiping && options.swiping(-delta.x / width);
+	        }
+	      },
+	      end: function end(event) {
+
+	        if (options.disableScroll && (delta.x || delta.y)) {
+	          event.preventDefault();
+	        }
+
+	        // measure duration
+	        var duration = +new Date() - _start.time;
+
+	        // determine if slide attempt triggers next/prev slide
+	        var isValidSlide = Number(duration) < 250 && // if slide duration is less than 250ms
+	        Math.abs(delta.x) > 20 || // and if slide amt is greater than 20px
+	        Math.abs(delta.x) > width / 2; // or if slide amt is greater than half the width
+
+	        // determine if slide attempt is past start and end
+	        var isPastBounds = !index && delta.x > 0 || // if first slide and slide amt is greater than 0
+	        index == slides.length - 1 && delta.x < 0; // or if last slide and slide amt is less than 0
+
+	        if (continuous) isPastBounds = false;
+
+	        // determine direction of swipe (true:right, false:left)
+	        var direction = delta.x < 0;
+
+	        // if not scrolling vertically
+	        if (!isScrolling) {
+	          if (isValidSlide && !isPastBounds) {
+	            if (direction) {
+	              if (continuous) {
+	                // we need to get the next in this direction in place
+	                move(circle(index - 1), -width, 0);
+	                move(circle(index + 2), width, 0);
+	              } else {
+	                move(index - 1, -width, 0);
+	              }
+
+	              move(index, slidePos[index] - width, touchSpeed);
+	              move(circle(index + 1), slidePos[circle(index + 1)] - width, touchSpeed);
+	              index = circle(index + 1);
+	            } else {
+	              if (continuous) {
+	                // we need to get the next in this direction in place
+	                move(circle(index + 1), width, 0);
+	                move(circle(index - 2), -width, 0);
+	              } else {
+	                move(index + 1, width, 0);
+	              }
+
+	              move(index, slidePos[index] + width, touchSpeed);
+	              move(circle(index - 1), slidePos[circle(index - 1)] + width, touchSpeed);
+	              index = circle(index - 1);
+	            }
+
+	            options.callback && options.callback(index, slides[index]);
+	          } else {
+	            if (continuous) {
+	              move(circle(index - 1), -width, speed);
+	              move(index, 0, speed);
+	              move(circle(index + 1), width, speed);
+	            } else {
+	              move(index - 1, -width, speed);
+	              move(index, 0, speed);
+	              move(index + 1, width, speed);
+	            }
+	          }
+	        }
+
+	        updateStyle(index, direction);
+
+	        delay = options.auto || 0;
+
+	        // kill touchmove and touchend event listeners until touchstart called again
+	        element.removeEventListener('touchmove', events, false);
+	        element.removeEventListener('touchend', events, false);
+	      },
+	      transitionEnd: function transitionEnd(event) {
+
+	        if (parseInt(event.target.getAttribute('data-index'), 10) == index) {
+
+	          if (delay) _begin();
+
+	          options.transitionEnd && options.transitionEnd.call(event, index, slides[index]);
+	        }
+	      }
+
+	    };
+
+	    // trigger setup
+	    _setup();
+
+	    // start auto slideshow if applicable
+	    if (delay) setTimeout(_begin, speed);
+
+	    // add event listeners
+	    if (browser.addEventListener) {
+
+	      // set touchstart event on element
+	      if (browser.touch) {
+	        element.addEventListener('touchstart', events, false);
+	        element.addEventListener('touchforcechange', function () {}, false);
+	      }
+
+	      if (browser.transitions) {
+	        element.addEventListener('webkitTransitionEnd', events, false);
+	        element.addEventListener('msTransitionEnd', events, false);
+	        element.addEventListener('oTransitionEnd', events, false);
+	        element.addEventListener('otransitionend', events, false);
+	        element.addEventListener('transitionend', events, false);
+	      }
+
+	      // set resize event on window
+	      window.addEventListener('resize', events, false);
+	    } else {
+
+	      window.onresize = function () {
+	        _setup();
+	      }; // to play nice with old IE
+	    }
+
+	    // expose the Swipe API
+	    return {
+	      setup: function setup() {
+
+	        _setup();
+	      },
+	      slide: function slide(to, speed) {
+
+	        // cancel slideshow
+	        _stop();
+
+	        _slide(to, speed);
+	      },
+	      prev: function prev() {
+
+	        // cancel slideshow
+	        _stop();
+
+	        _prev();
+	      },
+	      next: function next() {
+
+	        // cancel slideshow
+	        _stop();
+
+	        _next();
+	      },
+	      begin: function begin() {
+	        delay = options.auto || 0;
+	        _begin();
+	      },
+	      stop: function stop() {
+
+	        // cancel slideshow
+	        _stop();
+	      },
+	      getPos: function getPos() {
+
+	        // return current index position
+	        return index;
+	      },
+	      getNumSlides: function getNumSlides() {
+
+	        // return total number of slides
+	        return length;
+	      },
+	      kill: function kill() {
+
+	        // cancel slideshow
+	        _stop();
+
+	        // reset element
+	        element.style.width = '';
+	        element.style.left = '';
+
+	        // reset slides
+	        var pos = slides.length;
+	        while (pos--) {
+
+	          var slide = slides[pos];
+	          slide.style.width = '';
+	          slide.style.left = '';
+
+	          if (browser.transitions) translate(pos, 0, 0);
+	        }
+
+	        // removed event listeners
+	        if (browser.addEventListener) {
+
+	          // remove current event listeners
+	          element.removeEventListener('touchstart', events, false);
+	          element.removeEventListener('webkitTransitionEnd', events, false);
+	          element.removeEventListener('msTransitionEnd', events, false);
+	          element.removeEventListener('oTransitionEnd', events, false);
+	          element.removeEventListener('otransitionend', events, false);
+	          element.removeEventListener('transitionend', events, false);
+	          window.removeEventListener('resize', events, false);
+	        } else {
+	          window.onresize = null;
+	        }
+	      }
+	    };
+	  };
+	});
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(14);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(16)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!../node_modules/css-loader/index.js!./style.css", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js!./style.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(15)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".swipe-wrap::after {\n  content: '';\n  display: block;\n  clear: both;\n}\n", ""]);
+
+	// exports
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	// css base code, injected by the css-loader
+	module.exports = function() {
+		var list = [];
+
+		// return the list of modules as css string
+		list.toString = function toString() {
+			var result = [];
+			for(var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if(item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
+
+		// import a list of modules into the list
+		list.i = function(modules, mediaQuery) {
+			if(typeof modules === "string")
+				modules = [[null, modules, ""]];
+			var alreadyImportedModules = {};
+			for(var i = 0; i < this.length; i++) {
+				var id = this[i][0];
+				if(typeof id === "number")
+					alreadyImportedModules[id] = true;
+			}
+			for(i = 0; i < modules.length; i++) {
+				var item = modules[i];
+				// skip already imported module
+				// this implementation is not 100% perfect for weird media query combinations
+				//  when a module is imported multiple times with different media queries.
+				//  I hope this will never occur (Hey this way we have smaller bundles)
+				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+					if(mediaQuery && !item[2]) {
+						item[2] = mediaQuery;
+					} else if(mediaQuery) {
+						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+					}
+					list.push(item);
+				}
+			}
+		};
+		return list;
+	};
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	var stylesInDom = {},
+		memoize = function(fn) {
+			var memo;
+			return function () {
+				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+				return memo;
+			};
+		},
+		isOldIE = memoize(function() {
+			return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
+		}),
+		getHeadElement = memoize(function () {
+			return document.head || document.getElementsByTagName("head")[0];
+		}),
+		singletonElement = null,
+		singletonCounter = 0,
+		styleElementsInsertedAtTop = [];
+
+	module.exports = function(list, options) {
+		if(false) {
+			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+		}
+
+		options = options || {};
+		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+		// tags it will allow on a page
+		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+
+		// By default, add <style> tags to the bottom of <head>.
+		if (typeof options.insertAt === "undefined") options.insertAt = "bottom";
+
+		var styles = listToStyles(list);
+		addStylesToDom(styles, options);
+
+		return function update(newList) {
+			var mayRemove = [];
+			for(var i = 0; i < styles.length; i++) {
+				var item = styles[i];
+				var domStyle = stylesInDom[item.id];
+				domStyle.refs--;
+				mayRemove.push(domStyle);
+			}
+			if(newList) {
+				var newStyles = listToStyles(newList);
+				addStylesToDom(newStyles, options);
+			}
+			for(var i = 0; i < mayRemove.length; i++) {
+				var domStyle = mayRemove[i];
+				if(domStyle.refs === 0) {
+					for(var j = 0; j < domStyle.parts.length; j++)
+						domStyle.parts[j]();
+					delete stylesInDom[domStyle.id];
+				}
+			}
+		};
+	}
+
+	function addStylesToDom(styles, options) {
+		for(var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+			if(domStyle) {
+				domStyle.refs++;
+				for(var j = 0; j < domStyle.parts.length; j++) {
+					domStyle.parts[j](item.parts[j]);
+				}
+				for(; j < item.parts.length; j++) {
+					domStyle.parts.push(addStyle(item.parts[j], options));
+				}
+			} else {
+				var parts = [];
+				for(var j = 0; j < item.parts.length; j++) {
+					parts.push(addStyle(item.parts[j], options));
+				}
+				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+			}
+		}
+	}
+
+	function listToStyles(list) {
+		var styles = [];
+		var newStyles = {};
+		for(var i = 0; i < list.length; i++) {
+			var item = list[i];
+			var id = item[0];
+			var css = item[1];
+			var media = item[2];
+			var sourceMap = item[3];
+			var part = {css: css, media: media, sourceMap: sourceMap};
+			if(!newStyles[id])
+				styles.push(newStyles[id] = {id: id, parts: [part]});
+			else
+				newStyles[id].parts.push(part);
+		}
+		return styles;
+	}
+
+	function insertStyleElement(options, styleElement) {
+		var head = getHeadElement();
+		var lastStyleElementInsertedAtTop = styleElementsInsertedAtTop[styleElementsInsertedAtTop.length - 1];
+		if (options.insertAt === "top") {
+			if(!lastStyleElementInsertedAtTop) {
+				head.insertBefore(styleElement, head.firstChild);
+			} else if(lastStyleElementInsertedAtTop.nextSibling) {
+				head.insertBefore(styleElement, lastStyleElementInsertedAtTop.nextSibling);
+			} else {
+				head.appendChild(styleElement);
+			}
+			styleElementsInsertedAtTop.push(styleElement);
+		} else if (options.insertAt === "bottom") {
+			head.appendChild(styleElement);
+		} else {
+			throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");
+		}
+	}
+
+	function removeStyleElement(styleElement) {
+		styleElement.parentNode.removeChild(styleElement);
+		var idx = styleElementsInsertedAtTop.indexOf(styleElement);
+		if(idx >= 0) {
+			styleElementsInsertedAtTop.splice(idx, 1);
+		}
+	}
+
+	function createStyleElement(options) {
+		var styleElement = document.createElement("style");
+		styleElement.type = "text/css";
+		insertStyleElement(options, styleElement);
+		return styleElement;
+	}
+
+	function createLinkElement(options) {
+		var linkElement = document.createElement("link");
+		linkElement.rel = "stylesheet";
+		insertStyleElement(options, linkElement);
+		return linkElement;
+	}
+
+	function addStyle(obj, options) {
+		var styleElement, update, remove;
+
+		if (options.singleton) {
+			var styleIndex = singletonCounter++;
+			styleElement = singletonElement || (singletonElement = createStyleElement(options));
+			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
+			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
+		} else if(obj.sourceMap &&
+			typeof URL === "function" &&
+			typeof URL.createObjectURL === "function" &&
+			typeof URL.revokeObjectURL === "function" &&
+			typeof Blob === "function" &&
+			typeof btoa === "function") {
+			styleElement = createLinkElement(options);
+			update = updateLink.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+				if(styleElement.href)
+					URL.revokeObjectURL(styleElement.href);
+			};
+		} else {
+			styleElement = createStyleElement(options);
+			update = applyToTag.bind(null, styleElement);
+			remove = function() {
+				removeStyleElement(styleElement);
+			};
+		}
+
+		update(obj);
+
+		return function updateStyle(newObj) {
+			if(newObj) {
+				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
+					return;
+				update(obj = newObj);
+			} else {
+				remove();
+			}
+		};
+	}
+
+	var replaceText = (function () {
+		var textStore = [];
+
+		return function (index, replacement) {
+			textStore[index] = replacement;
+			return textStore.filter(Boolean).join('\n');
+		};
+	})();
+
+	function applyToSingletonTag(styleElement, index, remove, obj) {
+		var css = remove ? "" : obj.css;
+
+		if (styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = replaceText(index, css);
+		} else {
+			var cssNode = document.createTextNode(css);
+			var childNodes = styleElement.childNodes;
+			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
+			if (childNodes.length) {
+				styleElement.insertBefore(cssNode, childNodes[index]);
+			} else {
+				styleElement.appendChild(cssNode);
+			}
+		}
+	}
+
+	function applyToTag(styleElement, obj) {
+		var css = obj.css;
+		var media = obj.media;
+
+		if(media) {
+			styleElement.setAttribute("media", media)
+		}
+
+		if(styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = css;
+		} else {
+			while(styleElement.firstChild) {
+				styleElement.removeChild(styleElement.firstChild);
+			}
+			styleElement.appendChild(document.createTextNode(css));
+		}
+	}
+
+	function updateLink(linkElement, obj) {
+		var css = obj.css;
+		var sourceMap = obj.sourceMap;
+
+		if(sourceMap) {
+			// http://stackoverflow.com/a/26603875
+			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+		}
+
+		var blob = new Blob([css], { type: "text/css" });
+
+		var oldSrc = linkElement.href;
+
+		linkElement.href = URL.createObjectURL(blob);
+
+		if(oldSrc)
+			URL.revokeObjectURL(oldSrc);
+	}
 
 
 /***/ })
