@@ -14,11 +14,8 @@ const config = {
   devtool: 'source-map',
   entry: {
     'js/main': [
-      './demo/index.js',
-      './src/reactSwipe.js',
-      './src/swipe.js'
-    ]
-  },
+      './demo/index.js'
+    ]},
   output: {
     path: path.join(__dirname, 'demo'),
     filename: outputFileName
