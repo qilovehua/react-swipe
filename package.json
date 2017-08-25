@@ -1,6 +1,6 @@
 {
   "name": "react-swipe-plus",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "description": "forked from voronianski's react-swipe&swipe-js-iso, as a React component",
   "homepage": "https://github.com/qilovehua/react-swipe-plus",
   "keywords": [
@@ -62,10 +62,10 @@
     "webpack-umd-external": "^1.0.2"
   },
   "scripts": {
-    "build": "npm run build-demo && npm run build-dist-dev && npm run build-dist-prod",
-    "build-dist-dev": "NODE_ENV=development webpack --config webpack.config --colors",
+    "build": "npm run build-demo && npm run build-dev && npm run build-prod",
+    "build-dev": "NODE_ENV=development webpack --config webpack.config --colors",
     "build-demo": "NODE_ENV=development webpack --config webpack.demo.config --colors",
-    "build-dist-prod": "NODE_ENV=production webpack --config webpack.config --progress --colors -p",
+    "build-prod": "NODE_ENV=production webpack --config webpack.config --progress --colors -p",
     "lint": "eslint ./src",
     "lint-dev": "eslint --fix ./src",
     "test": "echo \"Comming soon ;)\" && exit 0"
