@@ -50,10 +50,29 @@ class ReactSwipe extends Component {
     className: ''
   };
 
+  constructor(props) {
+    super(props);
+    this.update = false;
+  }
+
   componentDidMount() {
     const { swipeOptions } = this.props;
 
     this.swipe = Swipe(this.refs.container, swipeOptions);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.children && this.props.children && nextProps.children.length !== this.props.children.length) {
+      console.log('==swipe==', nextProps.children.length, this.props.children.length);
+      this.update = true;
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.update) {
+      this.update = false;
+      this.swipe && this.swipe.setup();
+    }
   }
 
   componentWillUnmount() {

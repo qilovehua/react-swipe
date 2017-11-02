@@ -91,10 +91,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	var ReactSwipe = function (_Component) {
 	  _inherits(ReactSwipe, _Component);
 
-	  function ReactSwipe() {
+	  function ReactSwipe(props) {
 	    _classCallCheck(this, ReactSwipe);
 
-	    return _possibleConstructorReturn(this, (ReactSwipe.__proto__ || Object.getPrototypeOf(ReactSwipe)).apply(this, arguments));
+	    var _this = _possibleConstructorReturn(this, (ReactSwipe.__proto__ || Object.getPrototypeOf(ReactSwipe)).call(this, props));
+
+	    _this.update = false;
+	    return _this;
 	  }
 
 	  _createClass(ReactSwipe, [{
@@ -104,6 +107,22 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	      this.swipe = (0, _swipe3.default)(this.refs.container, swipeOptions);
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (nextProps.children && this.props.children && nextProps.children.length !== this.props.children.length) {
+	        console.log('==swipe==', nextProps.children.length, this.props.children.length);
+	        this.update = true;
+	      }
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate() {
+	      if (this.update) {
+	        this.update = false;
+	        this.swipe && this.swipe.setup();
+	      }
 	    }
 	  }, {
 	    key: 'componentWillUnmount',
@@ -145,7 +164,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          id = _props.id,
 	          className = _props.className,
 	          style = _props.style,
-	          children = _props.children;
+	          children = _props.children,
+	          swipeOptions = _props.swipeOptions;
 
 
 	      return _react2.default.createElement(
@@ -155,6 +175,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	          'div',
 	          { className: 'swipe-wrap', style: style.wrapper },
 	          _react2.default.Children.map(children, function (child) {
+	            if (!child) {
+	              return null;
+	            }
+
+	            var childStyle = child.props.style ? (0, _objectAssign2.default)({}, style.child, child.props.style) : style.child;
+
+	            return _react2.default.cloneElement(child, { style: childStyle });
+	          }),
+	          children.length === 2 && swipeOptions.continuous && _react2.default.Children.map(children, function (child) {
 	            if (!child) {
 	              return null;
 	            }
