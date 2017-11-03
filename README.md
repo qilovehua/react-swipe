@@ -7,6 +7,7 @@ forked from voronianski's react-swipe & swipe-js-iso
 1. new swipeOptions - degree, default 0(no 3D when swipe)
 
 ## Demo
+[See Demo from Mobile](https://qilovehua.github.io/react-swipe-plus/demo/index.html?slidesNum=5&continuous=true&auto=1&speed=3000&startSlide=3&margin=20)
 
 with 3D
 <p>
